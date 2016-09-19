@@ -1,0 +1,249 @@
+<?php
+
+use Icinga\Application\Config;
+
+$config = Config::module('puppetreports');
+$rptdir = $config->get('reports', 'dir');
+//$rptdir = '/var/lib/puppet/reports/';
+
+	// Requirements
+	global $config;
+
+	$config = array(
+		'report_dir' => $rptdir,
+	);
+
+
+	require_once('lib/spyc/spyc.php');
+	$errors = array();
+
+	// Sanity checks
+	if(!is_dir($config['report_dir'])) {
+		$errors[] = "The specified report dir couldn't be accessed.";
+	}
+
+	// Load the servers
+	$servers = array();
+	if($handle = opendir($config['report_dir'])) {
+		while (false !== ($entry = readdir($handle))) {
+			if($entry == "." || $entry == "..")
+				continue;
+
+			if(is_dir($config['report_dir'] . "/" . $entry)) {
+				$servers[] = $entry;
+			}
+		}
+		closedir($handle);
+	}
+	asort($servers);
+
+
+?>
+
+
+			<?php
+				if(count($errors) > 0) {
+			?>
+				<h1>Configuration error</h1>
+
+				<?php
+					foreach($errors as $error) {
+				?>
+				<p><?php echo $error; ?></p>
+				<?php
+					}
+				?>
+			<?php } else { ?>
+				<?php
+					// Report
+					if(isset($_GET) && array_key_exists('server', $_GET) && !empty($_GET['server']) &&
+						array_key_exists('report', $_GET) && !empty($_GET['report'])) {
+
+						$server_path = str_replace('..', '', mb_strtolower($_GET['server']));
+						$server_path = str_replace('/', '', $server_path);
+						$server_path = str_replace(' ', '', $server_path);
+						$server_path = str_replace('//', '/', $config['report_dir'] . '/' . $server_path);
+
+						$report_path = str_replace('..', '', $_GET['report']);
+						$report_path = str_replace('/', '', $report_path);
+						$report_path = str_replace(' ', '', $report_path);
+						$report_path = str_replace('//', '/', $server_path . '/' . $report_path . '.yaml');
+				?>
+
+<div class="controls">
+<?= $this->tabs ?>
+</div>
+
+<div class="content">
+
+						<h1>Report <?php echo htmlentities($_GET['report']); ?> (<?php echo '<a href="?server=' . htmlentities($_GET['server']) . '">'; echo htmlentities($_GET['server']); echo '</a>'; ?>)</h1>
+
+						<?php
+							if(!is_file($report_path)) {
+						?>
+								<p>Report not found.</p>
+						<?php
+							} else {
+								$data = spyc_load_file($report_path);
+								$data = array_shift($data);
+								if(isset($data)) {
+						?>
+									<h2>Overview</h2>
+									<table>
+										<tr>
+											<td align="center"><b>Run time:</b></td>
+											<td><?php echo htmlentities($data['time']); ?></td>
+										</tr>
+										<tr>
+											<td align="center"><b>Host:</b></td>
+											<td><?php echo htmlentities($data['host']); ?></td>
+										</tr>
+										<tr>
+											<td align="center"><b>Run type:</b></td>
+											<td><?php echo htmlentities($data['kind']); ?></td>
+										</tr>
+										<tr>
+											<td align="center"><b>Status:</b></td>
+											<td><?php echo htmlentities($data['status']); ?></td>
+										</tr>
+									</table>
+
+									<h2>Logs</h2>
+									<?php
+										if(array_key_exists('logs', $data) && count($data['logs']) > 0) {
+									?>
+									<table class="common-table">
+										<thead><tr>
+											<th><b>Level</th>
+											<th><b>Source</th>
+											<th><b>Time</th>											<th><b>Tags</b></td>
+											<th><b>Message</th>
+										</tr></thead>
+										<?php
+											foreach($data['logs'] as $log) {
+										?>
+										<tr>
+											<td><?php echo htmlentities($log['level']); ?></td>
+											<td><?php echo htmlentities($log['source']); ?></td>
+											<td><?php echo htmlentities($log['time']); ?></td>
+											<td><?php echo htmlentities(implode(',', $log['tags'])); ?></td>
+											<td width="40%"><pre><?php echo $log['message']; ?></pre></td>
+										</tr>
+										<?php } ?>
+									</table>
+									<?php
+										} else {
+											echo '<p>No logs found</p>';
+										}
+									?>
+						<?php
+								} else {
+						?>
+								<p>Report could not be loaded</p>
+						<?php
+								}
+						?>
+						<?php
+							}
+						?>
+				<?php
+					// Server view
+					} elseif(isset($_GET) && array_key_exists('server', $_GET) && !empty($_GET['server'])) {
+				?>
+
+<div class="controls">
+<?= $this->tabs ?>
+</div>
+
+<div class="content">
+
+						<h1>Host (<?php echo htmlentities($_GET['server']); ?>)</h1>
+
+						<?php
+							$reports = array();
+							$server_path = str_replace('..', '', mb_strtolower($_GET['server']));
+							$server_path = str_replace('/', '', $server_path);
+							$server_path = str_replace(' ', '', $server_path);
+							$server_path = str_replace('//', '/', $config['report_dir'] . '/' . $server_path);
+
+							if($handle = opendir($server_path)) {
+								while (false !== ($entry = readdir($handle))) {
+									if($entry == "." || $entry == "..")
+										continue;
+
+									if(is_file($server_path . "/" . $entry)) {
+										$reports[] = str_replace('.yaml', '', $entry);
+									}
+								}
+								closedir($handle);
+							}
+							asort($reports);
+						?>
+
+						<?php
+							if(count($reports) > 0) {
+								echo '<table class="common-table">';
+								echo '<thead><tr>';
+								echo '<th>ID</th>';
+								echo '<th>Run Time</th>';
+								echo '<th>Status</th>';
+								echo '<th>View</th>';
+								echo '</tr></thead>';
+
+								foreach($reports as $report) {
+									$data = spyc_load_file($server_path . '/' . $report . '.yaml');
+									$data = array_shift($data);
+
+									echo '<tr>';
+									echo '<td>' . htmlentities($report) . '</td>';
+									echo '<td>' . ((isset($data['time'])) ? htmlentities($data['time']) : '?') . '</td>';
+									echo '<td>' . ((isset($data['status'])) ? htmlentities($data['status']) : '?') . '</td>';
+									echo '<td><a href="?server=' . urlencode($_GET['server']);
+									echo '&report=' . $report . '">View</a></td>';
+									echo '</tr>';
+									unset($data);
+								}
+								echo '</table>';
+							} else { ?>
+								<p>No reports available.</p>
+							<?php } ?>
+
+				<?php
+					// Home page
+					} else {
+				?>
+
+<div class="controls">
+<?= $this->tabs ?>
+</div>
+<div class="content">
+
+
+<h1>Puppet Hosts</h1>
+
+<?php
+
+echo '<table data-base-target="_next" class="common-table"><tbody>';
+
+	foreach($servers as $server) {
+		echo '<tr>';
+
+		echo '<td><a href="?server=' . urlencode($server) . '">';
+		echo htmlentities($server) . '</a></td>';
+		echo '<tr>';
+
+	}
+echo '</tbody></table>';
+
+?>
+				<?php
+					}
+				?>
+			<?php } ?>
+
+
+</div>
+
+
+
+    
