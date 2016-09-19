@@ -1,0 +1,12 @@
+data/application/forms/GeneralConfigForm.php.i
+data/application/views/scripts/index/facts.phtml.i
+data/application/views/scripts/index/index.phtml.i
+data/application/views/scripts/config/index.phtml.i
+data/application/views/scripts/facts/index.phtml.i
+data/module.info.i
+data/application/controllers/ConfigController.php.i
+data/application/forms/config/GeneralConfigForm.php.i
+data/configuration.php.i
+data/application/views/scripts/facts/facts.phtml.i
+data/README.md.i
+data/application/controllers/IndexController.php.i
