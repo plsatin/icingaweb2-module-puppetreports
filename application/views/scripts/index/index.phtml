@@ -76,7 +76,7 @@ $rptdir = $config->get('reports', 'dir');
 
 <div class="content">
 
-						<h1>Report <?php echo htmlentities($_GET['report']); ?> (<?php echo '<a href="?server=' . htmlentities($_GET['server']) . '">'; echo htmlentities($_GET['server']); echo '</a>'; ?>)</h1>
+						<h1>Report <?php echo htmlentities($_GET['report']); ?> (<?php echo '<a href="/icingaweb2/puppetreports?server=' . htmlentities($_GET['server']) . '">'; echo htmlentities($_GET['server']); echo '</a>'; ?>)</h1>
 
 						<?php
 							if(!is_file($report_path)) {
@@ -198,7 +198,7 @@ $rptdir = $config->get('reports', 'dir');
 									echo '<td>' . htmlentities($report) . '</td>';
 									echo '<td>' . ((isset($data['time'])) ? htmlentities($data['time']) : '?') . '</td>';
 									echo '<td>' . ((isset($data['status'])) ? htmlentities($data['status']) : '?') . '</td>';
-									echo '<td><a href="?server=' . urlencode($_GET['server']);
+									echo '<td><a href="/icingaweb2/puppetreports?server=' . urlencode($_GET['server']);
 									echo '&report=' . $report . '">View</a></td>';
 									echo '</tr>';
 									unset($data);
@@ -228,7 +228,7 @@ echo '<table data-base-target="_next" class="common-table"><tbody>';
 	foreach($servers as $server) {
 		echo '<tr>';
 
-		echo '<td><a href="?server=' . urlencode($server) . '">';
+		echo '<td><a href="/icingaweb2/puppetreports?server=' . urlencode($server) . '">';
 		echo htmlentities($server) . '</a></td>';
 		echo '<tr>';
 
