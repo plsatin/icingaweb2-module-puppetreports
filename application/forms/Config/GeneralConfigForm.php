@@ -23,8 +23,8 @@ class GeneralConfigForm extends ConfigForm
             array(
                 'value'         => '/var/lib/puppet/reports',
                 'label'         => $this->translate('Reports dir'),
-                'description'   => $this->translate('Каталог с отчетами puppet.'),
-                'requirement'   => $this->translate('Пример: /var/lib/puppet/reports')
+                'description'   => $this->translate('Derictory with puppet reports.'),
+                'requirement'   => $this->translate('Example: /var/lib/puppet/reports')
             )
         );
 
@@ -34,8 +34,8 @@ class GeneralConfigForm extends ConfigForm
             array(
                 'value'         => '/var/lib/puppet/yaml/facts',
                 'label'         => $this->translate('Facts dir'),
-                'description'   => $this->translate('Каталог с фактами puppet.'),
-                'requirement'   => $this->translate('Пример: /var/lib/puppet/yaml/facts')
+                'description'   => $this->translate('Derictory with puppet facts.'),
+                'requirement'   => $this->translate('Exapmle: /var/lib/puppet/yaml/facts')
             )
         );
 

@@ -23,13 +23,11 @@ $rptdir = $config->get('facts', 'dir');
 	require_once('lib/spyc/spyc.php');
 	$errors = array();
 
-	// Sanity checks
 	if(!is_dir($config['facts_dir'])) {
-		$errors[] = "The specified facts dir couldn't be accessed.";
+		$errors[] = "The specified directory is not available.";
 	}
 
 
-//$rptdir = '/var/lib/puppet/yaml/facts';
 
 
 if (isset($_GET) && array_key_exists('server', $_GET) && !empty($_GET['server'])) {
@@ -37,51 +35,6 @@ $array = Spyc::YAMLLoad($rptdir. '/'. htmlentities(mb_strtolower($_GET['server']
 
 $arrvalues = $array['--- !ruby/object']['values'];
 
-/*
-echo "<table class='common-table'>";
-                    echo "<tr><td>fqdn</td><td>".$arrvalues['fqdn']."</td></tr>";
-                    echo "<tr><td>hostname</td><td>".$arrvalues['hostname']."</td></tr>";
-                    echo "<tr><td>domain</td><td>".$arrvalues['domain']."</td></tr>";
-
-                    echo "<tr><td>virtual</td><td>".$arrvalues['virtual']."</td></tr>";
-                    echo "<tr><td>is_virtual</td><td>".$arrvalues['is_virtual']."</td></tr>";
-                    echo "<tr><td>hardwaremodel</td><td>".$arrvalues['hardwaremodel']."</td></tr>";
-                    echo "<tr><td>architecture</td><td>".$arrvalues['architecture']."</td></tr>";
-
-                    echo "<tr><td>ipaddress</td><td>".$arrvalues['ipaddress']."</td></tr>";
-                    echo "<tr><td>macaddress</td><td>".$arrvalues['macaddress']."</td></tr>";
-                    echo "<tr><td>netmask</td><td>".$arrvalues['netmask']."</td></tr>";
-
-                    echo "<tr><td>manufacturer</td><td>".$arrvalues['manufacturer']."</td></tr>";
-                    echo "<tr><td>serialnumber</td><td>".$arrvalues['serialnumber']."</td></tr>";
-                    echo "<tr><td>productname</td><td>".$arrvalues['productname']."</td></tr>";
-
-                    echo "<tr><td>memorysize</td><td>".$arrvalues['memorysize']."</td></tr>";
-                    echo "<tr><td>memoryfree</td><td>".$arrvalues['memoryfree']."</td></tr>";
-
-                    echo "<tr><td>kernel</td><td>".$arrvalues['kernel']."</td></tr>";
-                    echo "<tr><td>kernelmajversion</td><td>".$arrvalues['kernelmajversion']."</td></tr>";
-                    echo "<tr><td>kernelrelease</td><td>".$arrvalues['kernelrelease']."</td></tr>";
-                    echo "<tr><td>kernelversion</td><td>".$arrvalues['kernelversion']."</td></tr>";
-
-                    echo "<tr><td>operatingsystem</td><td>".$arrvalues['operatingsystem']."</td></tr>";
-                    echo "<tr><td>operatingsystemmajrelease</td><td>".$arrvalues['operatingsystemmajrelease']."</td></tr>";
-                    echo "<tr><td>operatingsystemrelease</td><td>".$arrvalues['operatingsystemrelease']."</td></tr>";
-                    echo "<tr><td>osfamily</td><td>".$arrvalues['osfamily']."</td></tr>";
-
-                    echo "<tr><td>physicalprocessorcount</td><td>".$arrvalues['physicalprocessorcount']."</td></tr>";
-                    echo "<tr><td>processor0</td><td>".$arrvalues['processor0']."</td></tr>";
-                    echo "<tr><td>processorcount</td><td>".$arrvalues['processorcount']."</td></tr>";
-
-                    echo "<tr><td>timezone</td><td>".$arrvalues['timezone']."</td></tr>";
-                    echo "<tr><td>uptime</td><td>".$arrvalues['uptime']."</td></tr>";
-                    echo "<tr><td>uptime_days</td><td>".$arrvalues['uptime_days']."</td></tr>";
-                    echo "<tr><td>uptime_hours</td><td>".$arrvalues['uptime_hours']."</td></tr>";
-                    echo "<tr><td>uptime_seconds</td><td>".$arrvalues['uptime_seconds']."</td></tr>";
-
-                    echo "<tr><td>_timestamp</td><td>".$arrvalues['_timestamp']."</td></tr>";
-echo "</table>";          
-*/
 
 
 echo  "<h2>Host: ".$_GET['server']."</h2>";
@@ -95,15 +48,6 @@ foreach ( $arrvalues as $key => $value ) {
 }
 echo "</table>";
 
-/*
-echo '<pre>';
-print_r($array);
-echo '</pre>';
-
-echo '<pre>';
-echo Spyc::YAMLDump($array);
-echo '</pre>';
-*/
 
 
 } else {
@@ -127,7 +71,6 @@ echo '<table data-base-target="_next" class="common-table"><tbody>';
 foreach($servers as $server) {
 	echo '<tr>';
 
-	//echo '<td></td>';
 	echo '<td><a href="/icingaweb2/puppetreports/index/facts?server=' . urlencode($server) . '">';
 	echo htmlentities($server) . '</a></td>';
 	

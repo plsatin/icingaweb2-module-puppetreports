@@ -10,8 +10,11 @@
 5. [Installation](#installation)
 6. [Configuration](#configuration)
 7. [FAQ](#FAQ)
+8. [Thanks](#Thanks)
 
 ## About
+
+A simple module for icingaweb2 for viewing puppet reports and facts.
 
 ![](images/2016-12-19_11-08-23.png)
 ![](images/2016-12-19_11-08-54.png)
@@ -57,9 +60,15 @@ You can edit global configuration settings in Icinga Web 2 in `Configuration -> 
 
 Setting            | Description
 -------------------|-------------------
-Reports dir        | **Required.**
-Facts dir          | **Required.**
+Reports dir        | **Required.** Derictory with puppet reports
+Facts dir          | **Required.** Derictory with puppet facts
 
 
 ## FAQ
+
+
+
+## Thanks
+
+The concept was taken from https://github.com/DamianZaremba/puppet-reports. The module uses php class https://github.com/mustangostang/spyc
 

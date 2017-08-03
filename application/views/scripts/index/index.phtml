@@ -4,7 +4,6 @@ use Icinga\Application\Config;
 
 $config = Config::module('puppetreports');
 $rptdir = $config->get('reports', 'dir');
-//$rptdir = '/var/lib/puppet/reports/';
 
 	// Requirements
 	global $config;
@@ -17,12 +16,11 @@ $rptdir = $config->get('reports', 'dir');
 	require_once('lib/spyc/spyc.php');
 	$errors = array();
 
-	// Sanity checks
 	if(!is_dir($config['report_dir'])) {
-		$errors[] = "The specified report dir couldn't be accessed.";
+		$errors[] = "The specified directory is not available.";
 	}
 
-	// Load the servers
+
 	$servers = array();
 	if($handle = opendir($config['report_dir'])) {
 		while (false !== ($entry = readdir($handle))) {
