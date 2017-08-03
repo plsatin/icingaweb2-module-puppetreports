@@ -8,8 +8,8 @@ $section = $this->menuSection('Puppet reports', array(
     'icon' => 'beaker'
 ));
 
-$this->provideConfigTab('general', array(
+$this->provideConfigTab('Configuration', array(
     'title' => $this->translate('Adjust the general configuration of the puppetreports module'),
-    'label' => $this->translate('General'),
+    'label' => $this->translate('Configuration'),
     'url' => 'config'
 ));

@@ -1,4 +1,4 @@
 Module: puppetreports
-Version: 0.0.1
-Description: View puppet agents reports.
+Version: 0.1.0
+Description: A simple module for icingaweb2 for viewing puppet reports and facts.
  

@@ -56,7 +56,7 @@ icingacli module enable puppetreports
 
 ### Global Configuration
 
-You can edit global configuration settings in Icinga Web 2 in `Configuration -> Modules -> puppetreports -> General`.
+You can edit global configuration settings in Icinga Web 2 in `Configuration -> Modules -> puppetreports -> Configuration`.
 
 Setting            | Description
 -------------------|-------------------
