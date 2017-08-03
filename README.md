@@ -41,7 +41,7 @@ Git clone:
 
 ```
 cd /usr/share/icingaweb2/modules
-git clone https://github.com/plsatin/icingaweb2-module-puppetreports.git hardwareinfo
+git clone https://github.com/plsatin/icingaweb2-module-puppetreports.git puppetreports
 ```
 
 Enable the module in the Icinga Web 2 frontend in `Configuration -> Modules -> puppetreports -> enable`.
